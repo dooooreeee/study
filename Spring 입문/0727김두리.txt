@@ -1,0 +1,20 @@
+//프로젝트 환경설정///
+
+Welcome page만들기
+Resources/static폴더에 index.html을 만들면 자동으로 welcome page가 됨
+
+Controller - client가 요청하면 @Controller에 진입 -> 요청에 대한 작업 수행 ->뷰로 데이터 전달
+자세한 설명 https://hardlearner.tistory.com/315
+
+컨트롤러 클래스 제작 순서
+1.@Controller를 이용해서 클래스를 생성한다.
+2.@RequestMapping을 이용해, view의 요청 경로 지정한다.
+3.요청 처리 메소드(로직) 구현한다.Model 객체를 이용하여 view로 data전달
+4.뷰 이름 리턴한다.
+
+Controller 에서 리턴값은 기본적으로 resources/templates아래에서 리턴값(viewName).html을 처리함.(viewResolber)
+
+실행하기 cmd -> ./gradlew build (build폴더가 생김)-> cd build -> cd libs(jar파일이 생성된 것을 확인 할 수 있음)->jar 실행(java -jar 파일명) 서버배포시 이 파일만 서버에 넣고 실행하면 됨
+///////////////////
+
+

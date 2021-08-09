@@ -1,0 +1,71 @@
+DB를 쓰려면 DataSource가 필요함.
+
+*개방-폐쇄 원칙(OCP, Open-Closed Principle) 확장에는 열려있고, 수정, 변경에는 닫혀있다.*
+스프링의 DI (Dependencies Injection)을 사용하면 기존 코드를 전혀 손대지 않고, 설정만으로 구현 클래스를 변경할 수 있다.
+
+컨트롤+r ->마지막에 실행한것을 다시실행
+
+JDBC-> 옛날방식
+
+////스프링db test////
+
+@SpringBootTest->한개면 끝
+
+Test를 하다가 
+java.lang.IllegalStateException: Unable to find a @SpringBootConfiguration, you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test
+라는 오류가 발생하였는데 이는 Test클래스가 메인메소드가 속해있는 클래스 하위에 있지 않기 때문에 발생하였다.
+
+
+@SpringBootTest : 스프링 컨테이너와 테스트를 함께 실행한다.
+@Transactional : 테스트 케이스에 이 애노테이션이 있으면, 테스트 시작 전에 트랜잭션을 시작하고, 테스트 완료 후에 항상 롤백한다. 이렇게 하면 DB에 데이터가 남지 않으므로 다음 테스트에 영향을 주지 않는다.(테스트에 @commit시 반영됨)
+
+Test는 통합테스트(스프링과 DB연동)보다 단위테스트(순수자바코드)를 하도록 노력하자.
+
+////////////////
+
+
+////JdbcTemplate////->실무에서 많이 씀
+Jdbc를 줄이고줄이고 줄인 라이브러리가 JdbcTemplate
+
+순수 Jdbc와 동일한 환경설정을 하면 된다.
+스프링 JdbcTemplate과 MyBatis 같은 라이브러리는 JDBC API에서 본 반복 코드를 대부분 제거해준다. 
+하지만 SQL은 직접 작성해야 한다.
+
+*생성자가 1개일때 @Autowired 생각가능
+
+# DataSource 란?
+DataSource 인터페이스가 나오기 이전에 서로 다른 DBCP 구현체가 많아서 연동이 어려웠습니다. 
+이러한 문제를 해소하기 위해 DBCP 표준 인터페이스를 만들었는데, 이것이 DataSource 입니다.
+
+DataSource는 Connection pool을 관리하고 연동할 수 있게 하는 표준 인터페이스 입니다.
+DB와 관계된 connection 정보를 담고 있으며, bean으로 등록하여 인자로 넘겨준다. 
+이 과정을 통해 Spring은 DataSource로 DB와의 연결을 획득한다.
+////////////////////
+
+
+/////JPA//////->객체+orm(object , relation, mapping)->객체와 릴레이션을 맵핑한다.항상Tranjectional이 필요
+
+JPA는 기존의 반복 코드는 물론이고, 기본적인 SQL도 JPA가 직접 만들어서 실행해준다.
+JPA를 사용하면, SQL과 데이터 중심의 설계에서 객체 중심의 설계로 패러다임을 전환을 할 수 있다. 
+JPA를 사용하면 개발 생산성을 크게 높일 수 있다.
+
+@Entity-> 자바에서 관리하는 엔티티
+
+jpa는 EntityManager로 모든것이 동작한다.(jpa라이브러리가 현재 DB랑 다 연결해서 EM을 만듬)똑똑
+
+Select,insert,delete ->sql필요 x 자동
+옵션이 필요한경우 jpql을 작성해야함.
+
+
+ 주의!: 스프링부트 2.4부터는 spring.datasource.username=sa 를 꼭 추가해주어야 한다. 그렇지 않으면 오류가 발생한다.
+////////////////////////
+
+
+//////스프링데이터JPA//////실무에서 필수로 알아야함
+
+JPA를 편리하게 사용하도록 도와주는 기술로써 퍼포먼스가 그냥 JPA를 쓰는것보다 좋아짐.
+
+JpaRepository를 상속받아야함.
+
+스프링 데이터 JPA가 JpaRepository를 상속한 SpringDataJpaMemberRepository 를 구현체를 만들고 스프링 빈으로 자동 등록해준다.
+간단한건 구현할 필요없이 인터페이스이름만으로도 개발을 할 수 있다!!

@@ -1,0 +1,60 @@
+getter&setter  단축키 -> control+enter 대박
+option+enter ->implement method 
+//////////////////////
+
+정적컨텐츠 - resources/static에 파일을 만들면 됨
+spring은 웹브라우저가 요청을 하면 controller가 우선순위를 갖고, 맵핑된 controller가 없으면 static에서 찾음.
+
+////////////////////
+
+
+////////////////////
+Mvc와 템플릿엔진
+(Model view controller방식으로 쪼개서 뷰(html)를 템블릿엔진으로 프로그래밍한것을 렌더링해서 렌더링이 된 html을 클라이언트에게 전달)
+html에서 첫번째 줄 <html xmlns:th="http://www.thymeleaf.org">는 필수임 템플릿엔진이라서
+(Tmi - html을 서버없이 주소로만 열어봐도 결과물을 볼 수 있음.)
+
+    @GetMapping("hello-mvc")
+    public String helloMvc(@RequestParam("name") String name, Model model) {
+        model.addAttribute("name", name);
+        return "hello-template";
+    }
+에서 name을 파라미터로 받으면 String name은 받은 파라미터값이 된다.
+//////////////////////
+
+
+//////////////////////
+Api
+(객체를 반환)
+
+Ex)
+    @GetMapping("hello-string")
+    @ResponseBody -> 제일 중요!
+    public String helloString(@RequestParam("name") String name){
+        return "hello"+name;
+    }
+여기서 @ResponseBody란? http에서 헤더와 바디부분에서 바디부에 데이터(return "hello"+name)를 직접 넣어주겠다.
+템플렛엔진과의 차이점은 api는 view라는 개념이 없고 리턴값이 그대로 내려감.
+
+
+Ex)
+    @GetMapping("hello-api")
+    @ResponseBody
+    public Hello helloApi(@RequestParam("name") String name){
+        Hello hello=new Hello();
+        hello.setName(name);
+        return hello;
+    }
+    static class Hello{
+        private String name;
+        public String getName(){
+            return name;
+        }
+        public void setName(String name){
+            this.name=name;
+        }
+    }
+-->@ResponseBody에 객체를 반환하면 기본값으로 JSON으로 반환된다(JSON은 이름:값으로 이루어진 형식)
+
+@ResponseBody간단원리
+->웹브라우저에서 요청을 보냄->@ResponseBody이 붙여있는것을 확인->return값이 문자라면 그대로 http 응답에 넘겨줌(StringConverter동작)or return값이 객체라면 기본defaul인 JSON형식으로 데이터를 만들어서 http응답에 반환(JsonConverter동작).

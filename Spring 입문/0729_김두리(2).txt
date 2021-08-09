@@ -1,0 +1,39 @@
+///회원관리시스템 예제////
+
+/////Test///// command + shift +t -> 쉽게 test를 할 수 있는 단축키
+
+* 기본로직이 잘 돌아가는지도 중요하지만 예외처리도 잘 작동하는지도 중요하다. * ->assertThrows사용
+
+->>Test의 구조는
+//given
+//when
+//then 주석처리가 도움이 된다.
+
+
+Test 메소드 이름은 한글로 바꿔도 가능함
+
+    public Optional<Member> findeById(Long id) {
+        return Optional.ofNullable(store.get(id)); 
+    }
+->null이 반환될 수 있기때문에 Optional.ofNullable로 처리한다.
+
+내가 작성한 코드가 제대로 동작하는지 검증하려면?-> test case 작성
+test클래스 네이밍은 테스트할 클래스test임.
+
+사용방법
+-테스트할 메소드 위에 @Test입력 -> 메소드 실행
+
+보통 검사를 a와 b가 같은지 sysout(a==b); 이런식이지만 Assertions.assertThat(a).isEqualTo(B);를 사용하는게 좋다 ->실행이 잘된다면 값이 같은것임
+
+test를 할때 다른 메소드끼리 공유repository을 사용시 테스트가 끝날때마다 repository를 지우는 코드를 삽입해야함
+@AfterEach
+public void afterEach(){
+  /*
+	repository를 비우는 로직
+  */
+}--> test메소드가 한개가 끝나면 afterEach()메소드가 각각 실행된다.
+//////////////////
+
+
+//////비즈니스로직작성//
+control+T->extra Method ->긴 로직을 method로 만들어줌
